@@ -1,0 +1,39 @@
+/* Jen pro vývojovou stránku: napodobuje okolní web ČT. Do Wagtailu se nepřenáší. */
+body {
+  margin: 0;
+  background: #fff;
+  color: #202632;
+  font-family: 'Source Sans Pro', 'Source Sans 3', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+.site-header { border-bottom: 1px solid #dee0e4; background: #fff; }
+.site-header-inner {
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  min-height: 64px;
+}
+.site-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: #041e42;
+  text-decoration: none;
+  font-family: 'TV Sans Screen', 'Source Sans Pro', 'Source Sans 3', system-ui, sans-serif;
+  font-weight: 700;
+  font-size: 22px;
+  letter-spacing: -0.01em;
+}
+.site-nav { display: flex; gap: 24px; }
+.site-nav a { color: #202632; text-decoration: none; font-weight: 600; font-size: 15px; padding: 20px 0; border-bottom: 3px solid transparent; }
+.site-nav a[aria-current='page'] { border-bottom-color: #ed1c24; color: #041e42; }
+.site-main { background: #fff; }
+.site-footer { background: #041e42; color: #c3c6cc; font-size: 14px; }
+.site-footer .site-header-inner { min-height: 56px; }
+@media (max-width: 760px) {
+  .site-nav { display: none; }
+  .site-header-inner { padding: 0 16px; min-height: 56px; }
+}

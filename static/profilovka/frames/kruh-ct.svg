@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1080" viewBox="0 0 1080 1080">
+  <!-- PLACEHOLDER r&#225;me&#269;ek. Ve fin&#225;ln&#237; verzi: texty p&#345;eveden&#233; na k&#345;ivky a ofici&#225;ln&#237; zna&#269;ka &#268;T (CT-V1-lg-ng). -->
+  <defs>
+    <path id="l" d="M46 0H24C8 0 0 8 0 24v28c0 16 8 24 24 24h22V60H24c-1.5 0-2-.5-2-2V18c0-1.5.5-2 2-2h22z"/>
+  </defs>
+  <circle cx="540" cy="540" r="516" fill="none" stroke="#041E42" stroke-width="48"/>
+  <path d="M1038.4 673.6A516 516 0 0 1 836 962.6" fill="none" stroke="#ED1C24" stroke-width="48"/>
+  <rect x="260" y="870" width="560" height="112" rx="8" fill="#041E42"/>
+  <g transform="translate(292 896) scale(0.8)">
+    <use href="#l" fill="#fff"/>
+    <use href="#l" fill="#ED1C24" transform="matrix(-1 0 0 1 100 0)"/>
+  </g>
+  <text x="396" y="944" font-family="'TV Sans Screen','Source Sans Pro','Source Sans 3','Segoe UI',Roboto,Helvetica,Arial,sans-serif" font-size="54" font-weight="700" fill="#fff" letter-spacing="-0.5">&#268;esk&#225; televize</text>
+</svg>

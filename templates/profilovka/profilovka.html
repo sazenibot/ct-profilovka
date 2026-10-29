@@ -1,0 +1,106 @@
+{% load static %}
+{% comment %}
+  Komponenta „Profilovka s rámečkem ČT“.
+  Vkládá se přes {% include "profilovka/profilovka.html" %} (stránka nebo StreamField blok).
+  Na jedné stránce má být nejvýše jednou. Viz docs/wagtail-integrace.md.
+{% endcomment %}
+{% url "profilovka_stazeni" as count_url %}
+<link rel="stylesheet" href="{% static 'profilovka/css/profilovka.css' %}">
+
+<section class="ctp" data-profilovka
+         data-frames-base="{% static 'profilovka/frames/' %}"
+         data-count-url="{{ count_url }}"
+         data-csrf-token="{{ csrf_token }}"
+         aria-labelledby="ctp-title">
+
+  <header class="ctp-head">
+    <h2 class="ctp-title" id="ctp-title">Přidejte si rámeček ČT na profilovou fotku</h2>
+    <p class="ctp-lead">Nahrajte fotku, vyberte rámeček a stáhněte si hotovou profilovku pro Facebook.</p>
+  </header>
+
+  <div class="ctp-layout">
+    <div class="ctp-editor">
+      <div class="ctp-stage" data-ctp-stage>
+        <canvas class="ctp-canvas" width="1080" height="1080" data-ctp-canvas tabindex="0"
+                role="img" aria-label="Náhled profilovky. Po nahrání fotky ji posunete tažením nebo šipkami."></canvas>
+        <div class="ctp-drop-hint" aria-hidden="true">Pusťte fotku sem</div>
+        <div class="ctp-stage-empty" data-ctp-empty>
+          <button type="button" class="ctp-btn ctp-btn--primary" data-ctp-pick>Nahrát fotku</button>
+          <span class="ctp-stage-empty-note">nebo ji sem přetáhněte</span>
+        </div>
+        <div class="ctp-loading" data-ctp-loading hidden>
+          <span class="ctp-spinner" aria-hidden="true"></span>
+          <span>Načítám fotku…</span>
+        </div>
+      </div>
+
+      <p class="ctp-error" data-ctp-error role="alert" hidden></p>
+
+      <div class="ctp-zoom">
+        <label class="ctp-label" for="ctp-zoom">Přiblížení</label>
+        <input class="ctp-range" type="range" id="ctp-zoom" min="0" max="100" value="0" step="1" disabled
+               data-ctp-zoom aria-describedby="ctp-zoom-value">
+        <output class="ctp-zoom-value" id="ctp-zoom-value" data-ctp-zoom-value>100 %</output>
+      </div>
+      <p class="ctp-hint" data-ctp-move-hint hidden>Fotku posunete tažením myší nebo prstem.</p>
+    </div>
+
+    <div class="ctp-panel">
+      <fieldset class="ctp-card ctp-frames">
+        <legend class="ctp-card-title">Rámeček</legend>
+        <div class="ctp-frame-list" data-ctp-frames role="radiogroup" aria-label="Výběr rámečku"></div>
+      </fieldset>
+
+      <div class="ctp-card ctp-toggle-row">
+        <label class="ctp-switch">
+          <input type="checkbox" data-ctp-circle checked>
+          <span class="ctp-switch-track" aria-hidden="true"></span>
+          <span class="ctp-switch-text">
+            Kulatý náhled jako na Facebooku
+            <small>Stáhne se celý čtverec, kruh si ořízne Facebook.</small>
+          </span>
+        </label>
+      </div>
+
+      <div class="ctp-actions">
+        <button type="button" class="ctp-btn ctp-btn--primary ctp-btn--lg" data-ctp-download disabled>
+          <svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20"><path fill="currentColor" d="M11 3h2v10.17l3.59-3.58L18 11l-6 6-6-6 1.41-1.41L11 13.17z"/><path fill="currentColor" d="M5 19h14v2H5z"/></svg>
+          Stáhnout profilovku
+        </button>
+        <div class="ctp-actions-row">
+          <button type="button" class="ctp-btn ctp-btn--ghost" data-ctp-pick data-ctp-repick hidden>Jiná fotka</button>
+          <button type="button" class="ctp-btn ctp-btn--ghost" data-ctp-reset hidden>Vymazat</button>
+        </div>
+        <a href="#" class="ctp-fallback-link" data-ctp-fallback hidden>Stahování nezačalo? Klepněte sem a obrázek si uložte ručně.</a>
+      </div>
+
+      <p class="ctp-privacy">
+        <svg aria-hidden="true" viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M12 2 4 5v6c0 5 3.4 9.7 8 11 4.6-1.3 8-6 8-11V5zm-1 14-4-4 1.4-1.4 2.6 2.6 5.6-5.6L18 9z"/></svg>
+        Fotka neopouští vaše zařízení. Úprava probíhá jen ve vašem prohlížeči.
+      </p>
+
+      <details class="ctp-howto">
+        <summary>Jak si profilovku nastavit na Facebooku</summary>
+        <ol>
+          <li>Stáhněte si obrázek tlačítkem výše.</li>
+          <li>Na Facebooku klepněte na svou profilovou fotku a zvolte <em>Vybrat profilovou fotku</em>.</li>
+          <li>Vyberte stažený obrázek a uložte.</li>
+        </ol>
+      </details>
+    </div>
+  </div>
+
+  <input type="file" accept="image/*,.heic,.heif" class="ctp-file" data-ctp-file tabindex="-1" aria-hidden="true">
+
+  <div class="ctp-overlay" data-ctp-overlay hidden role="dialog" aria-modal="true" aria-labelledby="ctp-overlay-title">
+    <div class="ctp-overlay-box">
+      <p class="ctp-overlay-title" id="ctp-overlay-title">Podržte prst na obrázku a zvolte „Uložit obrázek“</p>
+      <img class="ctp-overlay-img" data-ctp-overlay-img alt="Vaše profilovka s rámečkem ČT">
+      <p class="ctp-overlay-note">Na iPhonu případně „Přidat do Fotek“. Pokud volba chybí, otevřete stránku v Safari nebo Chromu.</p>
+      <button type="button" class="ctp-btn ctp-btn--light" data-ctp-overlay-close>Zavřít</button>
+    </div>
+  </div>
+</section>
+
+<script src="{% static 'profilovka/js/profilovka.config.js' %}" defer></script>
+<script src="{% static 'profilovka/js/profilovka.js' %}" defer></script>

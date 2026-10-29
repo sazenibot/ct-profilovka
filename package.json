@@ -1,0 +1,15 @@
+{
+  "name": "ct-profilovka",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Mockup: rámeček České televize na profilovou fotku (vanilla JS/CSS pro integraci do Wagtailu)",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0 --port 4317 --strictPort",
+    "build": "vite build",
+    "preview": "vite preview --host 0.0.0.0 --port 4318 --strictPort"
+  },
+  "devDependencies": {
+    "vite": "^6.4.1"
+  }
+}

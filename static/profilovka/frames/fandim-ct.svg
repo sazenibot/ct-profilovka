@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1080" viewBox="0 0 1080 1080">
+  <!-- PLACEHOLDER r&#225;me&#269;ek. Ve fin&#225;ln&#237; verzi: texty p&#345;eveden&#233; na k&#345;ivky a ofici&#225;ln&#237; zna&#269;ka &#268;T (CT-V1-lg-ng). -->
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#041E42" stop-opacity="0"/>
+      <stop offset="0.45" stop-color="#041E42" stop-opacity="0.82"/>
+      <stop offset="1" stop-color="#041E42" stop-opacity="0.96"/>
+    </linearGradient>
+    <path id="l" d="M46 0H24C8 0 0 8 0 24v28c0 16 8 24 24 24h22V60H24c-1.5 0-2-.5-2-2V18c0-1.5.5-2 2-2h22z"/>
+  </defs>
+  <rect x="0" y="560" width="1080" height="520" fill="url(#g)"/>
+  <g transform="translate(486 622) scale(1.08)">
+    <use href="#l" fill="#fff"/>
+    <use href="#l" fill="#ED1C24" transform="matrix(-1 0 0 1 100 0)"/>
+  </g>
+  <g font-family="'TV Sans Screen','Source Sans Pro','Source Sans 3','Segoe UI',Roboto,Helvetica,Arial,sans-serif" fill="#fff" text-anchor="middle">
+    <text x="540" y="806" font-size="64" font-weight="600">Fand&#237;m</text>
+    <text x="540" y="896" font-size="88" font-weight="700" letter-spacing="-1">&#268;esk&#233; televizi</text>
+  </g>
+</svg>
