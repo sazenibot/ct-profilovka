@@ -11,9 +11,9 @@ Ukázky kódu níže jsou návrh pro Django 4.2+/5.x a Wagtail 6.x. Proti reáln
 | `static/profilovka/js/profilovka.js` | `profilovka/static/profilovka/js/` | logika editoru, beze změn |
 | `static/profilovka/js/profilovka.config.js` | `profilovka/static/profilovka/js/` | seznam rámečků a nastavení výstupu |
 | `static/profilovka/css/profilovka.css` | `profilovka/static/profilovka/css/` | styly, vše pod třídou `.ctp` |
-| `static/profilovka/frames/*.svg` | `profilovka/static/profilovka/frames/` | rámečky (zatím placeholdery) |
+| `static/profilovka/frames/*.png` | `profilovka/static/profilovka/frames/` | rámečky (PNG s alfa kanálem; SVG je také podporováno) |
 | `templates/profilovka/profilovka.html` | `profilovka/templates/profilovka/` | markup komponenty (Django šablona) |
-| `index.html`, `dev/`, `vite.config.js` | nepřenáší se | jen vývojový server a simulace okolního webu |
+| `index.html`, `dev/`, `vite.config.js` | nepřenáší se | jen vývojový server a testovací stránka |
 
 Předpokládáme novou Django aplikaci `profilovka` (`python manage.py startapp profilovka`) přidanou do `INSTALLED_APPS`.
 
@@ -97,7 +97,7 @@ POST /api/profilovka/stazeni/
 Content-Type: application/json
 X-CSRFToken: <token>
 
-{"frame": "fandim-ct"}
+{"frame": "ceska-je-srdce-modra"}
 ```
 
 Požadavek je „fire-and-forget“ (`fetch` s `keepalive`). Jeho selhání nikdy nezablokuje stažení. Kromě toho komponenta vyvolá DOM událost `profilovka:download` (`event.detail.frame`), na kterou lze napojit analytiku webu (GA4, Gemius…) bez zásahu do `profilovka.js`.
@@ -158,7 +158,7 @@ def profilovka_stazeni(request):
 
 ```python
 # settings.py – musí odpovídat id v profilovka.config.js
-PROFILOVKA_FRAME_IDS = {"fandim-ct", "verejna-sluzba", "divam-se-na-ct", "kruh-ct"}
+PROFILOVKA_FRAME_IDS = {"ceska-je-srdce-modra", "ceska-je-moje-cervena", "ceska-je-moje-modra", "ceska-je-srdce-bila", "ceska-je-srdce-logo-modra"}
 ```
 
 ```python
@@ -222,9 +222,9 @@ python manage.py collectstatic --noinput
 ```
 
 - Cesty k rámečkům skládá JS jako `data-frames-base` + `file` z configu. `data-frames-base` je `{% static 'profilovka/frames/' %}`.
-- **ManifestStaticFilesStorage** (hashované názvy): `collectstatic` zachová i nehashované originály, takže to funguje, ale SVG rámečků nebudou mít cache-busting. Při změně grafiky rámeček přejmenujte (`fandim-ct-v2.svg`) nebo použijte variantu s `json_script` (kap. 7), kde se URL generují přes `{% static %}` a jsou hashované.
-- **Statické soubory na jiné doméně** (CDN, S3): rámečky se načítají s `crossOrigin="anonymous"`, aby šel výsledný canvas exportovat. Server statiky proto musí u SVG vracet `Access-Control-Allow-Origin` (doména webu nebo `*`). Bez toho se rámeček nenačte (zobrazí se chybová hláška).
-- SVG musí mít `Content-Type: image/svg+xml`.
+- **ManifestStaticFilesStorage** (hashované názvy): `collectstatic` zachová i nehashované originály, takže to funguje, ale soubory rámečků nebudou mít cache-busting. Při změně grafiky rámeček přejmenujte (`ceska-je-moje-modra-v2.png`) nebo použijte variantu s `json_script` (kap. 7), kde se URL generují přes `{% static %}` a jsou hashované.
+- **Statické soubory na jiné doméně** (CDN, S3): rámečky se načítají s `crossOrigin="anonymous"`, aby šel výsledný canvas exportovat. Server statiky proto musí u rámečků vracet `Access-Control-Allow-Origin` (doména webu nebo `*`). Bez toho se rámeček nenačte (zobrazí se chybová hláška).
+- Rámečky musí mít správný `Content-Type` (`image/png`, případně `image/svg+xml`).
 - **CSP** webu musí povolit: `img-src` pro doménu statiky + `data:` + `blob:` (náhled k uložení a stažení), `connect-src 'self'` (počítadlo). Komponenta nepoužívá inline skripty ani inline styly v atributech.
 
 ## 7. Rámečky
@@ -233,26 +233,25 @@ Seznam je v `static/profilovka/js/profilovka.config.js`:
 
 ```js
 frames: [
-  { id: 'fandim-ct', label: 'Fandím České televizi', file: 'fandim-ct.svg' },
+  { id: 'ceska-je-srdce-modra', label: 'Česká je ♥ – modrá', file: 'ceska-je-srdce-modra.png' },
   // …
 ]
 ```
 
-Nový rámeček: nahrát SVG do `static/profilovka/frames/`, přidat řádek do configu, přidat `id` do `PROFILOVKA_FRAME_IDS`, spustit `collectstatic`.
+Nový rámeček: nahrát PNG (nebo SVG) do `static/profilovka/frames/`, přidat řádek do configu, přidat `id` do `PROFILOVKA_FRAME_IDS`, spustit `collectstatic`.
 
-Požadavky na SVG:
+Požadavky na rámeček:
 
-- čtverec, `viewBox="0 0 1080 1080"` a zároveň `width="1080" height="1080"` (Firefox jinak nevykreslí SVG do canvasu ve správné velikosti);
-- průhledné pozadí, žádné externí odkazy (fonty, obrázky);
-- **texty převedené na křivky** (SVG vložené jako obrázek nenačte webové fonty, placeholdery v repu používají systémové písmo);
+- **PNG (doporučeno):** čtverec s alfa kanálem (RGBA), průhledné všude, kde má být vidět fotka. Rozměr **alespoň 1080×1080 px**, protože výstup má 1080 px a menší rámeček se při exportu zvětšuje a mírně změkne. Aktuální finální rámečky mají 889×889 px; pro ostřejší výsledek si od marketingu vyžádejte export 1080 px (nebo 2160 px).
+- **SVG (alternativa):** `viewBox="0 0 1080 1080"` a zároveň `width="1080" height="1080"` (Firefox jinak nevykreslí SVG do canvasu ve správné velikosti), žádné externí odkazy, **texty převedené na křivky** (SVG vložené jako obrázek nenačte webové fonty);
 - důležitý obsah uvnitř vepsaného kruhu (střed 540/540, poloměr 540), protože Facebook zobrazuje profilovku kruhově;
 - oficiální značka ČT ze zdrojových souborů manuálu (`CT-V1-lg*.eps` / `.png`), ne překreslená. Placeholdery obsahují pouze přibližnou kresbu symbolu.
 
-Pokud se rámečky mají spravovat z Wagtailu (bez nasazení), lze vytvořit snippet `ProfilovkaFrame(id, label, svg: Document/Image, order, active)`, v šabloně vyrenderovat seznam přes `{{ frames|json_script:"profilovka-frames" }}` a v `profilovka.config.js` ho načíst místo pevného pole. To je rozšíření nad rámec mockupu.
+Pokud se rámečky mají spravovat z Wagtailu (bez nasazení), lze vytvořit snippet `ProfilovkaFrame(id, label, image: Image, order, active)`, v šabloně vyrenderovat seznam přes `{{ frames|json_script:"profilovka-frames" }}` a v `profilovka.config.js` ho načíst místo pevného pole. To je rozšíření nad rámec mockupu.
 
 ## 8. Kontrolní seznam před spuštěním
 
-- [ ] Rámečky od marketingu (SVG, texty v křivkách, oficiální logo, bezpečná zóna kruhu)
+- [ ] Finální rámečky od marketingu v rozlišení aspoň 1080×1080 px (PNG s alfa kanálem, bezpečná zóna kruhu)
 - [ ] Písmo: pokud web ČT načítá TV Sans Screen přes `@font-face`, UI komponenty ho použije samo (`font-family: 'TV Sans Screen', …`)
 - [ ] `PROFILOVKA_FRAME_IDS` odpovídá configu
 - [ ] Rozhodnutí o CSRF vs. cache (kap. 5)

@@ -2,7 +2,9 @@
 
 Webová komponenta, ve které si fanoušci České televize přidají rámeček ČT na profilovou fotku pro Facebook. Funkčně vychází z [verejnopravne.cz/profilovka_verejnost.html](https://www.verejnopravne.cz/profilovka_verejnost.html), vizuálně z Manuálu značky ČT a webu ceskatelevize.cz.
 
-Je to **vanilla JS + CSS + SVG bez závislostí a bez buildu**, připravené k vložení přímo do Wagtail (Django) šablony. Vite slouží jen jako lokální vývojový server.
+Je to **vanilla JS + CSS + PNG rámečky bez závislostí a bez buildu**, připravené k vložení přímo do Wagtail (Django) šablony. Vite slouží jen jako lokální vývojový server.
+
+**Pro vývojáře ČT:** předávací dokument s postupem nasazení do Wagtailu je v [`PREDANI.md`](PREDANI.md), technické detaily v [`docs/wagtail-integrace.md`](docs/wagtail-integrace.md).
 
 ## Funkce
 
@@ -40,20 +42,20 @@ static/profilovka/            → do Django static (beze změn)
   js/profilovka.js            logika editoru
   js/profilovka.config.js     seznam rámečků, velikost výstupu, limity
   css/profilovka.css          styly (vše pod .ctp)
-  frames/*.svg                placeholder rámečky 1080×1080
+  frames/*.png                finální rámečky od marketingu (RGBA, 889×889)
 templates/profilovka/
   profilovka.html             markup komponenty jako Django šablona
 docs/wagtail-integrace.md     integrace do Wagtailu: typ stránky, StreamField blok,
                               model + view počítadla, admin, CSRF, collectstatic
-index.html, dev/, vite.config.js   jen vývojová stránka (simuluje okolní web ČT)
+index.html, dev/, vite.config.js   jen vývojová stránka (samotná komponenta)
 ```
 
 ## Přidání rámečku
 
-1. Uložte SVG do `static/profilovka/frames/` (čtverec 1080×1080, průhledné pozadí, texty v křivkách, obsah uvnitř vepsaného kruhu).
+1. Uložte PNG s alfa kanálem do `static/profilovka/frames/` (čtverec, ideálně aspoň 1080×1080 px, průhledné pozadí, obsah uvnitř vepsaného kruhu). SVG je také podporováno.
 2. Přidejte řádek do `frames` v `static/profilovka/js/profilovka.config.js`:
    ```js
-   { id: 'muj-ramecek', label: 'Můj rámeček', file: 'muj-ramecek.svg' },
+   { id: 'muj-ramecek', label: 'Můj rámeček', file: 'muj-ramecek.png' },
    ```
 3. Na produkci přidejte `id` do whitelistu počítadla (viz integrační návod).
 
@@ -79,10 +81,9 @@ npm run preview   # http://localhost:4318
 Podle veřejného [Manuálu značky České televize v1.2](https://www.ceskatelevize.cz/vse-o-ct/zakony-a-pravidla/smluvni-podminky-ct/) a design systému webu ceskatelevize.cz:
 
 - **barvy**: ČT modrá `#041E42` (Pantone 282 C) jako primární, ČT červená `#ED1C24` (Pantone 185 C) jako akcent; neutrální šedé z webu ČT (`#F2F4F8`, `#DEE0E4`, `#6B6F77`, `#202632`); bílé pozadí, malé zaoblení (4–8 px)
-- **značka**: symbol „obrazovky“ ze dvou tvarů (levý modrý, pravý červený); na tmavém podkladu negativ (bílá + červená), podle kap. 2.4 manuálu
 - **písmo**: ČT používá licencované písmo **TV Sans Screen** (Marek Pistora, Studio Najbrt). Mockup ho nenačítá ani nelinkuje. CSS ho uvádí první ve `font-family`, takže na webu ČT, který ho už načítá, se použije samo. Jinak záloha **Source Sans Pro / Source Sans 3** (písmo textů na ceskatelevize.cz, licence OFL), pokud je v systému, a dále systémové bezpatkové písmo.
 
-**Symbol ČT v mockupu je přibližná překreslená kresba**, ne oficiální soubor. Pro ostrý provoz je nutné použít zdrojové soubory značky z manuálu (`CT-V1-lg*`) a dodržet ochrannou zónu (½ výšky symbolu) a minimální velikost (42 px na obrazovce). Rámečky jsou **placeholdery pro marketing** s texty v systémovém písmu. Finální SVG mají mít texty převedené na křivky.
+Rámečky jsou **finální grafika od marketingu** (5× PNG 889×889 s alfa kanálem). Výstup má 1080×1080, takže se rámečky při exportu mírně zvětšují. Pro ostřejší výsledek je lepší zdroj v rozlišení aspoň 1080 px.
 
 ## Co mockup záměrně nemá
 

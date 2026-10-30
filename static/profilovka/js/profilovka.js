@@ -115,6 +115,7 @@
       btn.setAttribute('aria-checked', i === 0 ? 'true' : 'false');
       btn.tabIndex = i === 0 ? 0 : -1;
       btn.dataset.index = String(i);
+      btn.title = frame.label;
       btn.innerHTML = '<span class="ctp-frame-thumb"><img alt="" loading="lazy"></span><span class="ctp-frame-label"></span>';
       btn.querySelector('img').src = url;
       btn.querySelector('.ctp-frame-label').textContent = frame.label;

@@ -1,8 +1,8 @@
 /*
- * Konfigurace profilovky. Nový rámeček = nahrát SVG do static/profilovka/frames/
+ * Konfigurace profilovky. Nový rámeček = nahrát PNG nebo SVG do static/profilovka/frames/
  * a přidat sem jeden řádek. `id` se posílá do počítadla stažení (jen a–z, 0–9, pomlčka).
- * SVG: čtverec (viewBox i width/height), průhledné pozadí, texty převedené na křivky,
- * důležitý obsah uvnitř vepsaného kruhu (Facebook ořízne rohy).
+ * Rámeček: čtverec s průhledným pozadím (PNG s alfa kanálem, ideálně aspoň 1080×1080 px,
+ * nebo SVG s texty v křivkách), důležitý obsah uvnitř vepsaného kruhu (Facebook ořízne rohy).
  */
 window.PROFILOVKA_CONFIG = {
   outputSize: 1080,
@@ -10,9 +10,10 @@ window.PROFILOVKA_CONFIG = {
   maxFileSizeMB: 30,
   maxWorkingPx: 2048,
   frames: [
-    { id: 'fandim-ct', label: 'Fandím České televizi', file: 'fandim-ct.svg' },
-    { id: 'verejna-sluzba', label: 'Veřejná služba. Pro všechny.', file: 'verejna-sluzba.svg' },
-    { id: 'divam-se-na-ct', label: 'Dívám se na ČT', file: 'divam-se-na-ct.svg' },
-    { id: 'kruh-ct', label: 'Kruh Česká televize', file: 'kruh-ct.svg' },
+    { id: 'ceska-je-srdce-modra', label: 'Česká je ♥ – modrá', file: 'ceska-je-srdce-modra.png' },
+    { id: 'ceska-je-moje-cervena', label: 'Česká je moje – červená', file: 'ceska-je-moje-cervena.png' },
+    { id: 'ceska-je-moje-modra', label: 'Česká je moje – modrá', file: 'ceska-je-moje-modra.png' },
+    { id: 'ceska-je-srdce-bila', label: 'Česká je ♥ – bílá', file: 'ceska-je-srdce-bila.png' },
+    { id: 'ceska-je-srdce-logo-modra', label: 'Česká je ♥ s logem – modrá', file: 'ceska-je-srdce-logo-modra.png' },
   ],
 };
