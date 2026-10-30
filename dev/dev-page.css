@@ -1,7 +1,7 @@
 /* Jen pro vývojovou stránku. Do Wagtailu se nepřenáší, tam okolí dodá base šablona webu. */
 body {
   margin: 0;
-  background: #fff;
+  background: #f2f4f8;
   color: #202632;
   font-family: 'Source Sans Pro', 'Source Sans 3', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 }
